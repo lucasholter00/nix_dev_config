@@ -1,5 +1,13 @@
 { config, pkgs, ... }:
 
+let
+  dotfiles = pkgs.fetchFromGitHub {
+  owner = "lucasholter00";
+  repo = "dotfiles";
+  rev = "95865d6";
+  sha256 = "sha256-/MGnjqTwb+YiwzW/hShZBwTYiB4Af47IvVZb/H7S1xc=";
+};
+in 
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -29,6 +37,7 @@
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
     # # fonts?
 
+    pkgs.git
     pkgs.tmux
     pkgs.zsh
     pkgs.neovim
@@ -55,6 +64,10 @@
     #   org.gradle.console=verbose
     #   org.gradle.daemon.idletimeout=3600000
     # '';
+
+    ".zshrc".source = "${dotfiles}/.zshrc";
+    ".tmux.conf".source = "${dotfiles}/.tmux.conf";
+    ".p10k.zsh".source = "${dotfiles}/.p10k.zsh";
   };
 
   # Home Manager can also manage your environment variables through
@@ -75,6 +88,7 @@
   #
   home.sessionVariables = {
     # EDITOR = "emacs";
+    SHELL = "${pkgs.zsh}/bin/zsh";
   };
 
   # Let Home Manager install and manage itself.
