@@ -1,12 +1,6 @@
-{direnv-instant, config, lib, pkgs, ... }:
+{direnv-instant ,config, lib, pkgs, ... }:
 
 let
-  zsh-syntax-highlighting = pkgs.fetchFromGitHub {
-  owner = "zsh-users";
-  repo = "zsh-syntax-highlighting";
-  rev = "5eb677b";
-  sha256 = "sha256-KRsQEDRsJdF7LGOMTZuqfbW6xdV5S38wlgdcCM98Y/Q=";
-};
   nvimConfig = pkgs.fetchFromGitHub {
   owner = "lucasholter00";
   repo = "barebones-nvim";
@@ -16,8 +10,8 @@ let
   dotfiles = pkgs.fetchFromGitHub {
   owner = "lucasholter00";
   repo = "dotfiles";
-  rev = "9f59e63";
-  sha256 = "sha256-rjzA86ncRCRH9BKoZVY1n5BA75UdSUP5BKLcukyF/OQ=";
+  rev = "0b76c31";
+  sha256 = "sha256-sbXH+xqqvcfIKLjoYnXOunaqL0oAwN1R0gM3bjh5Dy8=";
 };
 in 
 {
@@ -25,7 +19,6 @@ in
     direnv-instant.homeModules.direnv-instant
   ];
 
-  programs.direnv-instant.enable = true;
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "lucasholter";
@@ -58,6 +51,7 @@ in
     pkgs.bat
     pkgs.tmux
     pkgs.zsh
+    pkgs.oh-my-zsh
     pkgs.neovim
     pkgs.eza
     pkgs.zoxide
@@ -66,10 +60,11 @@ in
     pkgs.nodejs_24
     pkgs.cargo
     pkgs.gccgo15
-    pkgs.zsh-autosuggestions
     pkgs.tree
     pkgs.direnv
     pkgs.nix-direnv
+    pkgs.meslo-lgs-nf
+    pkgs.oh-my-posh
 
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
@@ -77,6 +72,15 @@ in
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
+    (pkgs.writeShellScriptBin "flakify" ''
+      if [ ! -e flake.nix ]; then
+        nix flake new -t github:nix-community/nix-direnv .
+      elif [ ! -e .envrc ]; then
+        echo "use flake" > .envrc
+        direnv allow
+      fi
+      ''${EDITOR:-vim} flake.nix
+    '')
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -86,14 +90,9 @@ in
     target = ".config/nvim/";
   };
 
-  home.file.".oh-my-zsh/custom/plugins/zsh-autosuggestions" = {
-    source = "${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions";
-    target = ".oh-my-zsh/custom/plugins/zsh-autosuggestions" ;
-  };
-
-  home.file.".oh-my-zsh/custom/plugins/zsh-syntax-highlighting" = {
-    source = "${zsh-syntax-highlighting}";
-    target = ".oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ;
+  home.file.".fonts" = {
+    source = "${pkgs.meslo-lgs-nf}";
+    target = ".fonts";
   };
 
   home.file = {
@@ -109,8 +108,6 @@ in
     # '';
 
     ".zshrc".source = "${dotfiles}/.zshrc";
-    ".tmux.conf".source = "${dotfiles}/.tmux.conf";
-    ".p10k.zsh".source = "${dotfiles}/.p10k.zsh";
   };
 
   home.activation = {
@@ -154,13 +151,97 @@ in
 
   programs = {
     direnv = {
-      enable = true;
-      enableBashIntegration = true; # see note on other shells below
+      enableZshIntegration = true; # see note on other shells below
       nix-direnv.enable = true;
+      silent = true;
+    };
+    direnv-instant.enable = true;
+
+    zoxide = {
+        enable = true;
+        enableZshIntegration = true;
     };
 
-    bash.enable = true; # see note on other shells below
+    zsh = {
+        enable = true;
+        autosuggestion.enable = true;
+        syntaxHighlighting.enable = true;
+        enableCompletion = true;
+        oh-my-zsh = {
+            enable = true;
+            plugins = [
+                "git"
+                "web-search"
+            ];
+        };
+        shellAliases = {
+            cd = "z";
+            gs = "git status";
+            cat = "bat";
+        };
+        initContent = "";
+    };
+    oh-my-posh = {
+        enable = true;
+        useTheme = "multiverse-neon";
+    };
+
+    tmux = {
+        enable = true;
+        prefix = "C-a";
+        keyMode = "vi";
+        shell = "${pkgs.zsh}/bin/zsh";
+        terminal = "xterm-256color";
+        clock24 = true;
+        extraConfig = ''
+          set -g status-justify left
+          unbind ";"
+          bind ";" split-window -h
+          unbind '"'
+          bind '-' split-window -v
+          unbind r
+          bind r source-file ~/.config/tmux/tmux.conf
+          bind -r j resize-pane -D 5
+          bind -r k resize-pane -U 5
+          bind -r l resize-pane -R 5
+          bind -r h resize-pane -L 5
+          bind -r m resize-pane -Z
+          bind-key -T copy-mode-vi 'v' send -X begin-selection
+          bind-key -T copy-mode-vi 'y' send -X copy-selection
+        '';
+        plugins = with pkgs; [
+            {
+                plugin = tmuxPlugins.dracula;
+                extraConfig = ''
+                  set -g @dracula-show-powerline true
+                  set -g @dracula-show-left-icon session
+                  set -g @dracula-show-flags true
+                  set -g @dracula-border-contrast true
+                  set -g @dracula-plugins "battery time"
+                  set -g @dracula-day-month true
+                  set -g @dracula-show-timezone false
+                  # default is 1, it can accept any number and 0 disables padding.
+                  set -g @dracula-left-icon-padding 1
+                  set -g @dracula-military-time true
+                  set -g status-position top
+                '';
+            }
+            {
+                plugin = tmuxPlugins.vim-tmux-navigator;
+            }
+            {
+                plugin = tmuxPlugins.resurrect;
+                extraConfig = "set -g @resurrect-capture-pane-contents 'on'";
+            }
+            {
+                plugin = tmuxPlugins.continuum;
+                extraConfig = "set -g @continuum-restore 'on'";
+            }
+        ];
+    };
+
   };
+
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
