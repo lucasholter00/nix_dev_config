@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{direnv-instant, config, lib, pkgs, ... }:
 
 let
   zsh-syntax-highlighting = pkgs.fetchFromGitHub {
@@ -21,6 +21,11 @@ let
 };
 in 
 {
+  imports = [
+    direnv-instant.homeModules.direnv-instant
+  ];
+
+  programs.direnv-instant.enable = true;
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "lucasholter";
@@ -50,6 +55,7 @@ in
     # # fonts?
 
     pkgs.git
+    pkgs.bat
     pkgs.tmux
     pkgs.zsh
     pkgs.neovim
@@ -142,7 +148,7 @@ in
   #  /etc/profiles/per-user/lucasholter/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    # EDITOR = "emacs";
+    EDITOR = "nvim";
     SHELL = "${pkgs.zsh}/bin/zsh";
   };
 
