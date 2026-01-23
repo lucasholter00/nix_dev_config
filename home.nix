@@ -4,14 +4,8 @@ let
   nvimConfig = pkgs.fetchFromGitHub {
   owner = "lucasholter00";
   repo = "barebones-nvim";
-  rev = "2d29ecc";
-  sha256 = "sha256-SVToLRkIndTqh84Mk7ZhBnG0vwM7kAnF2Pi2bxZyHyg=";
-};
-  dotfiles = pkgs.fetchFromGitHub {
-  owner = "lucasholter00";
-  repo = "dotfiles";
-  rev = "0b76c31";
-  sha256 = "sha256-sbXH+xqqvcfIKLjoYnXOunaqL0oAwN1R0gM3bjh5Dy8=";
+  rev = "d55759f";
+  sha256 = "sha256-Khc5JVZLmshAz3fMDQ1aXvxBmyLVioIee5iO1hL7S9M=";
 };
 in 
 {
@@ -48,6 +42,7 @@ in
     # # fonts?
 
     pkgs.git
+    pkgs.openssh
     pkgs.bat
     pkgs.tmux
     pkgs.zsh
@@ -65,6 +60,8 @@ in
     pkgs.nix-direnv
     pkgs.meslo-lgs-nf
     pkgs.oh-my-posh
+    pkgs.gnumake
+    pkgs.tldr
 
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
@@ -107,7 +104,6 @@ in
     #   org.gradle.daemon.idletimeout=3600000
     # '';
 
-    ".zshrc".source = "${dotfiles}/.zshrc";
   };
 
   home.activation = {
@@ -150,13 +146,13 @@ in
   };
 
   programs = {
+
     direnv = {
       enableZshIntegration = true; # see note on other shells below
       nix-direnv.enable = true;
       silent = true;
     };
     direnv-instant.enable = true;
-
     zoxide = {
         enable = true;
         enableZshIntegration = true;
@@ -178,12 +174,20 @@ in
             cd = "z";
             gs = "git status";
             cat = "bat";
+            win = "z /mnt/c/Users/LucasCarlssonHolter/";
+            ls="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions --grid";
         };
         initContent = "";
     };
     oh-my-posh = {
         enable = true;
-        useTheme = "multiverse-neon";
+        # useTheme = "tokyonight_storm";
+        # useTheme = "clean-detailed";
+        # useTheme = "tokyo";
+        # useTheme = "atomicBit";
+        # useTheme = "catppuccin_latte";
+        # useTheme = "the-unnamed";
+        settings = builtins.fromJSON (builtins.readFile ./oh-my-posh-themes/tokyonight_storm_nix.json);
     };
 
     tmux = {
@@ -238,6 +242,19 @@ in
                 extraConfig = "set -g @continuum-restore 'on'";
             }
         ];
+    };
+    # openssh = {
+    #     startAgent = true;
+    # };
+
+    git = {
+        enable = true;
+        settings = {
+            user = {
+                name = "Lucas Holter";
+                email = "lucas.holter@hotmail.com";
+            };
+        };
     };
 
   };
