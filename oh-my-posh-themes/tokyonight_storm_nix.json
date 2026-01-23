@@ -30,7 +30,7 @@
           "style": "plain",
           "background": "transparent",
           "foreground": "p:terminal-blue",
-          "template": "\u279c "
+          "template": " \u279c "
         },
         {
           "type": "path",
@@ -52,10 +52,10 @@
             "{{ if gt .Ahead 0 }}p:terminal-blue{{ end }}",
             "{{ if gt .Behind 0 }}p:celeste-blue{{ end }}"
           ],
-          "template": "({{ .HEAD}})",
-
+          "template": "{{  .UpstreamIcon  }}{{ .HEAD }}{{ if .Working.Changed }}*{{ end }}{{ if .Staging.Changed }}+{{ end }}",
           "options": {
             "fetch_status": true,
+            "fetch_upstream_icon": true,
             "branch_icon": "\ue725 "
           }
         },
@@ -128,7 +128,7 @@
         {
           "foreground": "p:pistachio-green",
           "style": "plain",
-          "template": "\u25b6",
+          "template": " \u25b6",
           "type": "text"
         }
       ],
