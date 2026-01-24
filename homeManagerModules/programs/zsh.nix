@@ -36,9 +36,9 @@ in
                 initContent = ''
                     eval $(ssh-agent) &> /dev/null
                     ssh-add ~/.ssh/github &> /dev/null
-                    # fpath+=( "${pkgs.pure-prompt}/.zsh/pure" )
-                    # autoload -U promptinit; promptinit
-                    # prompt pure
+                    if [ ! -d "${config.xdg.configHome}/nvim" ]; then
+                        git clone git@github.com:lucasholter00/barebones-nvim ${config.xdg.configHome}/nvim
+                    fi
                 '';
 
                 shellAliases = {

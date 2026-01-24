@@ -48,11 +48,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1768749864,
-        "narHash": "sha256-EKRMFBLBRCHrFZ5luX85RTnsN3b2q3FjZEi62vXwJBE=",
+        "lastModified": 1769289524,
+        "narHash": "sha256-6Cwtvzrw79cOk1lCzN2aKSVrpgSOSQoYhyMmhXXZjTA=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "5148e08046dc8c74c66b8aee4d302a47d6931b56",
+        "rev": "2539eba97a6df237d75617c25cd2dbef92df3d5b",
         "type": "github"
       },
       "original": {
@@ -79,11 +79,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1768564909,
-        "narHash": "sha256-Kell/SpJYVkHWMvnhqJz/8DqQg2b6PguxVWOuadbHCc=",
+        "lastModified": 1769018530,
+        "narHash": "sha256-MJ27Cy2NtBEV5tsK+YraYr2g851f3Fl1LpNHDzDX15c=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "e4bae1bd10c9c57b2cf517953ab70060a828ee6f",
+        "rev": "88d3861acdd3d2f0e361767018218e51810df8a1",
         "type": "github"
       },
       "original": {
@@ -96,11 +96,11 @@
     "nvimConfig": {
       "flake": false,
       "locked": {
-        "lastModified": 1769196415,
-        "narHash": "sha256-vmBQNKo0L4rwquheJX38frh03Vb9odWMoL8a0j082CA=",
+        "lastModified": 1769293580,
+        "narHash": "sha256-A+O/kzG0CmrRiClTzRGFQY8O7XWu0QUHHCZVwQ8Z+NY=",
         "owner": "lucasholter00",
         "repo": "barebones-nvim",
-        "rev": "8fc62804d8a5659a181c284bf253cccb7443a325",
+        "rev": "9d9d785583fba8c1d29da922c6e545f1faf5479c",
         "type": "github"
       },
       "original": {

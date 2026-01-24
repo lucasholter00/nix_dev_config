@@ -28,6 +28,10 @@ in
               fi
               ''${EDITOR:-vim} flake.nix
             '')
+
+            (pkgs.writeShellScriptBin "nvimdev" ''
+                NVIM_APPNAME=nvim-dev nvim
+            '')
         ];
     };
 }

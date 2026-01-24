@@ -10,11 +10,9 @@ in
             #nvim dependencies
             pkgs.ripgrep
             pkgs.fzf
+            pkgs.tree-sitter
+            pkgs.rust-analyzer
         ];
 
-        home.file.".config/nvim" = {
-            target = ".config/nvim"; 
-	    source = "${inputs.nvimConfig}/";
-        };
     };
 }

@@ -4,7 +4,7 @@
         ./programs/git.nix
         ./programs/zsh.nix
         ./programs/tmux.nix
-        ./file/nvim.nix
+        ./packages/nvim.nix
         ./packages/util.nix
         ./sessionVariables/vars.nix
     ];
