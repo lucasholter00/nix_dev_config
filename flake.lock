@@ -93,11 +93,28 @@
         "type": "github"
       }
     },
+    "nvimConfig": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1769196415,
+        "narHash": "sha256-vmBQNKo0L4rwquheJX38frh03Vb9odWMoL8a0j082CA=",
+        "owner": "lucasholter00",
+        "repo": "barebones-nvim",
+        "rev": "8fc62804d8a5659a181c284bf253cccb7443a325",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lucasholter00",
+        "repo": "barebones-nvim",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "direnv-instant": "direnv-instant",
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_2",
+        "nvimConfig": "nvimConfig"
       }
     },
     "treefmt-nix": {
