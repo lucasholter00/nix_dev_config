@@ -61,6 +61,9 @@ in
     pkgs.oh-my-posh
     pkgs.gnumake
     pkgs.tldr
+    pkgs.starship
+
+    pkgs.gnome-terminal
 
     #tmux line dependencies
     pkgs.jq
@@ -115,21 +118,6 @@ in
   };
 
   home.activation = {
-    installOmz = lib.hm.dag.entryAfter ["writeBoundary" "installPackages" "zsh"] ''
-      export PATH="${
-        lib.makeBinPath (with pkgs; [zsh git])
-      }:$PATH"
-      if [ -d "''${HOME}/.oh-my-zsh" ]; then
-        echo "Oh my zsh already installed"
-      else
-        run sh -c "$(${pkgs.curl}/bin/curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh ) --unattended"
-      fi
-      if [ -d "''${HOME}/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
-        echo "Powerlevel10k already installed"
-      else
-        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "''${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
-      fi
-    '';
   };     
 
   # Home Manager can also manage your environment variables through
@@ -182,6 +170,9 @@ in
         initContent = ''
             eval $(ssh-agent) &> /dev/null
             ssh-add ~/.ssh/github &> /dev/null
+            # fpath+=( "${pkgs.pure-prompt}/.zsh/pure" )
+            # autoload -U promptinit; promptinit
+            # prompt pure
         '';
 
         shellAliases = {
@@ -192,10 +183,7 @@ in
             ls="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions --grid";
         };
     };
-    oh-my-posh = {
-        enable = true;
-        settings = builtins.fromJSON (builtins.readFile ./oh-my-posh-themes/tokyonight_storm_nix.json);
-    };
+    starship.enable = true;
 
     tmux = {
         enable = true;
